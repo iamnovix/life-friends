@@ -89,8 +89,8 @@ export function homeView() {
     ${head}
     <div class="stats3">
       <a class="stat" href="#/friends"><span>전체 친구</span><b>${num(S.friends.length)}<small>명</small></b></a>
-      <a class="stat" href="#/analysis?tab=meet"><span>${year}년 만난 친구</span><b>${num(ys.uniqueFriends)}<small>명</small></b></a>
-      <a class="stat" href="#/memories"><span>${year}년 모임</span><b>${num(ys.meetings)}<small>회</small></b></a>
+      <a class="stat" href="#/analysis?tab=meet"><span>올해 만난 친구</span><b>${num(ys.uniqueFriends)}<small>명</small></b></a>
+      <a class="stat" href="#/memories"><span>올해 모임</span><b>${num(ys.meetings)}<small>회</small></b></a>
     </div>
     <div class="quick-actions">
       <a class="btn primary lg" href="#/record">${icon('plus')} 만남 기록</a>
