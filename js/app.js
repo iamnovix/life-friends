@@ -92,7 +92,7 @@ async function render() {
   }
   viewEl.innerHTML = `<div class="page">${v.html}</div>`;
   v.mount?.(viewEl);
-  if (raw !== lastPath) window.scrollTo(0, 0);
+  if (raw !== lastPath) viewEl.scrollTop = 0;
   lastPath = raw;
 }
 
