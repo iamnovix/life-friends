@@ -9,7 +9,7 @@ export function avatar(f, size = 48) {
   if (!f) return `<span class="avatar ghost" style="width:${size}px;height:${size}px">?</span>`;
   if (f.avatar) return `<img class="avatar" src="${esc(f.avatar)}" alt="" style="width:${size}px;height:${size}px">`;
   const c = catMap().get((f.categoryIds || [])[0]);
-  return `<span class="avatar" style="width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px;background:${esc(c?.color || '#8A9AA8')}">${esc((f.name || '?').trim().charAt(0))}</span>`;
+  return `<span class="avatar" style="width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px;background:${esc(c?.color || '#A9B6C6')}">${esc((f.name || '?').trim().charAt(0))}</span>`;
 }
 
 export function catTags(ids, max = 3) {
@@ -54,7 +54,7 @@ export function meetingRow(m, { showYear = false } = {}) {
 }
 
 export function emptyState(title, desc, actions = '') {
-  return `<div class="empty"><div class="empty-ic">${icon('heart', 34)}</div><h3>${esc(title)}</h3><p>${desc}</p>${actions}</div>`;
+  return `<div class="empty"><div class="empty-ic"><img src="assets/logo-symbol.png" alt=""></div><h3>${esc(title)}</h3><p>${desc}</p>${actions}</div>`;
 }
 
 export function bars(rows, { max, unit = '', color } = {}) {

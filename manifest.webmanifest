@@ -1,11 +1,15 @@
 {
   "name": "인생친구",
   "short_name": "인생친구",
-  "description": "살면서 만난 친구와 만남을 기록하고 돌아보는 인간관계 기록 앱",
+  "description": "함께한 모든 순간이, 인생이 된다",
   "start_url": "./#/home",
   "display": "standalone",
-  "background_color": "#F8F5EE",
-  "theme_color": "#F8F5EE",
+  "background_color": "#FEFBF0",
+  "theme_color": "#FEFBF0",
   "lang": "ko",
-  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
 }

@@ -2,7 +2,18 @@
 
 import { download } from './util.js';
 
-const C = { bg: '#F8F5EE', card: '#FFFFFF', text: '#26303A', sub: '#6B7682', primary: '#4F6577', accent: '#B98B5E', line: '#E6E0D4' };
+// 로고 색상
+const C = { bg: '#FEFBF0', card: '#FFFFFF', text: '#33302C', sub: '#676561', primary: '#70ABF5', accent: '#F3A12E', line: '#F1E9D9' };
+const BRAND_STOPS = [[0, '#FFB946'], [0.38, '#FC916A'], [0.64, '#ADA9ED'], [1, '#70ABF5']];
+
+function loadLogo() {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = 'assets/logo-symbol.png';
+  });
+}
 const FONT = '"Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -29,16 +40,28 @@ export async function exportReportImage(r, { names = false, places = false } = {
   ctx.fillStyle = C.bg;
   ctx.fillRect(0, 0, W, H);
 
-  // 표지
-  ctx.fillStyle = C.primary;
+  // 표지 (로고 그라데이션 + 심볼)
+  const grad = ctx.createLinearGradient(P, P, W - P, P + 240);
+  BRAND_STOPS.forEach(([o, col]) => grad.addColorStop(o, col));
+  ctx.fillStyle = grad;
   roundRect(ctx, P, P, W - 2 * P, 240, 32);
   ctx.fill();
-  ctx.fillStyle = '#E9EEF2';
+  const logo = await loadLogo();
+  if (logo) {
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
+    ctx.beginPath();
+    ctx.arc(W - P - 130, P + 120, 92, 0, Math.PI * 2);
+    ctx.fill();
+    const lh = 128;
+    const lw = lh * logo.naturalWidth / logo.naturalHeight;
+    ctx.drawImage(logo, W - P - 130 - lw / 2, P + 120 - lh / 2, lw, lh);
+  }
+  ctx.fillStyle = 'rgba(255,255,255,.9)';
   ctx.font = `500 34px ${FONT}`;
   ctx.fillText(`${r.year}년`, P + 48, P + 90);
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = `700 60px ${FONT}`;
-  ctx.fillText('나의 인간관계 리포트', P + 48, P + 175);
+  ctx.font = `700 56px ${FONT}`;
+  ctx.fillText('나의 인간관계 리포트', P + 48, P + 172);
 
   // 숫자 3개
   let y = 360;
@@ -130,7 +153,7 @@ export async function exportReportImage(r, { names = false, places = false } = {
   ctx.fillStyle = C.sub;
   ctx.font = `500 26px ${FONT}`;
   ctx.textAlign = 'center';
-  ctx.fillText('인생친구 · 내가 기록한 만남을 바탕으로 만든 보고서', W / 2, H - 60);
+  ctx.fillText('인생친구 · 함께한 모든 순간이, 인생이 된다', W / 2, H - 60);
 
   const blob = await new Promise((res) => c.toBlob(res, 'image/png'));
   const file = new File([blob], `인생친구_${r.year}_리포트.png`, { type: 'image/png' });

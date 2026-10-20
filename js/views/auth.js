@@ -3,7 +3,7 @@ import { esc } from '../util.js';
 import { icon, nav, toast, busy } from '../ui.js';
 
 const SLIDES = [
-  { ic: 'users', title: '내 인생에는 어떤 친구들이 있었을까?', desc: '학창 시절부터 지금까지, 살면서 만난 소중한 사람들을 한곳에 기록해요.' },
+  { logo: true, title: '내 인생에는 어떤 친구들이 있었을까?', desc: '학창 시절부터 지금까지, 살면서 만난 소중한 사람들을 한곳에 기록해요.' },
   { ic: 'calendar', title: '만남을 간단하게 기록해요', desc: '친구를 고르고 날짜만 정하면 끝. 여러 친구와의 모임도 한 번에 기록할 수 있어요.' },
   { ic: 'chart', title: '나는 어떤 사람들과 함께 살아왔을까?', desc: '친구 유형, 만남 횟수, 인연의 시작과 기간을 기록한 그대로 보여 드려요.' },
   { ic: 'lock', title: '나만 볼 수 있어요', desc: '친구 정보는 다른 사람에게 공개되지 않고, 공유용 보고서에는 기본적으로 실명이 빠져요.' },
@@ -32,7 +32,9 @@ export function onboardingView() {
       };
       const draw = () => {
         const s = SLIDES[i];
-        slideEl.innerHTML = `<div class="onboard-ic">${icon(s.ic, 48)}</div><h1>${esc(s.title)}</h1><p>${esc(s.desc)}</p>`;
+        slideEl.innerHTML = s.logo
+          ? `<img class="onboard-logo" src="assets/logo-symbol.png" alt="인생친구 로고"><p class="brand-name">인생친구</p><p class="tagline">함께한 모든 순간이, 인생이 된다</p><h1 style="margin-top:1.4rem">${esc(s.title)}</h1><p>${esc(s.desc)}</p>`
+          : `<div class="onboard-ic">${icon(s.ic, 48)}</div><h1>${esc(s.title)}</h1><p>${esc(s.desc)}</p>`;
         root.querySelectorAll('[data-dot]').forEach((d) => d.classList.toggle('on', +d.dataset.dot === i));
         next.textContent = i === SLIDES.length - 1 ? '시작하기' : '다음';
       };
@@ -50,7 +52,7 @@ export function loginView() {
     hideNav: true,
     hideTop: true,
     html: `<div class="auth">
-      <div class="auth-brand"><div class="logo">${icon('heart', 34)}</div><h1>인생친구</h1><p class="muted">나의 인간관계 역사를 기록하는 곳</p></div>
+      <div class="auth-brand"><img class="logo" src="assets/logo-symbol.png" alt="인생친구 로고"><h1>인생친구</h1><p class="tagline">함께한 모든 순간이, 인생이 된다</p></div>
       <div class="tabs" data-mode><button class="tab on" data-m="login">로그인</button><button class="tab" data-m="signup">회원가입</button></div>
       <form class="form" novalidate>
         <label class="field"><span>이메일</span><input type="email" name="email" autocomplete="email" inputmode="email" placeholder="example@email.com"></label>

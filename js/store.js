@@ -6,16 +6,23 @@ import { computeFriendStats } from './stats.js';
 
 export const COLS = ['friends', 'categories', 'meetings', 'memories', 'reminders'];
 
+// 로고 색(오렌지·코랄·라벤더·블루)에 맞춘 기본 유형 색
 export const DEFAULT_CATEGORIES = [
-  { id: 'cat_school', name: '학창 시절 친구', color: '#6C8EAD' },
-  { id: 'cat_work', name: '직장·사업 친구', color: '#6F8A72' },
-  { id: 'cat_hobby', name: '취미·모임 친구', color: '#C08B5C' },
-  { id: 'cat_family', name: '가족·친척', color: '#B7727B' },
-  { id: 'cat_neighbor', name: '이웃·지역 친구', color: '#8A7BA8' },
-  { id: 'cat_online', name: '여행·온라인 친구', color: '#5E9B9B' },
-  { id: 'cat_special', name: '인생의 특별한 친구', color: '#C59A3E' },
-  { id: 'cat_etc', name: '기타', color: '#929BA4' },
+  { id: 'cat_school', name: '학창 시절 친구', color: '#5C9BEF' },
+  { id: 'cat_work', name: '직장·사업 친구', color: '#7D86DB' },
+  { id: 'cat_hobby', name: '취미·모임 친구', color: '#F3A12E' },
+  { id: 'cat_family', name: '가족·친척', color: '#F4835A' },
+  { id: 'cat_neighbor', name: '이웃·지역 친구', color: '#5FB37C' },
+  { id: 'cat_online', name: '여행·온라인 친구', color: '#3FB2BA' },
+  { id: 'cat_special', name: '인생의 특별한 친구', color: '#E5739B' },
+  { id: 'cat_etc', name: '기타', color: '#A39E96' },
 ].map((c, i) => ({ ...c, isDefault: true, order: i }));
+
+// 이전 버전 기본 색 → 새 기본 색 (사용자가 직접 바꾼 색은 건드리지 않음)
+const OLD_DEFAULT_COLORS = {
+  cat_school: '#6C8EAD', cat_work: '#6F8A72', cat_hobby: '#C08B5C', cat_family: '#B7727B',
+  cat_neighbor: '#8A7BA8', cat_online: '#5E9B9B', cat_special: '#C59A3E', cat_etc: '#929BA4',
+};
 
 export const DEFAULT_SETTINGS = {
   displayName: '',
@@ -43,7 +50,10 @@ export const backend = () => B;
 
 export async function initBackend() {
   const cfg = window.FIREBASE_CONFIG;
-  if (cfg && cfg.apiKey) B = await import('./backend-firebase.js');
+  // 개발용: localhost에서 localStorage lf_dev_local=1 이면 로그인 없이 기기 저장 모드로 화면 확인
+  let devLocal = false;
+  try { devLocal = location.hostname === 'localhost' && localStorage.getItem('lf_dev_local') === '1'; } catch { /* 무시 */ }
+  if (cfg && cfg.apiKey && !devLocal) B = await import('./backend-firebase.js');
   S.mode = B.mode;
   await B.init();
 }
@@ -75,6 +85,15 @@ export async function loadUserData() {
     S.settings.seeded = true;
     S.settings.createdAt = S.settings.createdAt || now;
     await B.saveSettings(S.settings);
+  }
+  const recolor = S.categories
+    .filter((c) => OLD_DEFAULT_COLORS[c.id] && c.color === OLD_DEFAULT_COLORS[c.id])
+    .map((c) => ({ ...c, color: DEFAULT_CATEGORIES.find((d) => d.id === c.id).color, updatedAt: nowISO() }));
+  if (recolor.length) {
+    try {
+      await B.batch(recolor.map((doc) => ({ type: 'put', col: 'categories', doc })));
+      recolor.forEach((doc) => applyLocal({ type: 'put', col: 'categories', doc }));
+    } catch (e) { console.warn('유형 색 갱신 실패', e); }
   }
   S.loaded = true;
   changed();

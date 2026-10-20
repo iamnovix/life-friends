@@ -249,7 +249,7 @@ export function friendFormView([id]) {
         if (!name) return;
         if (S.categories.some((c) => norm(c.name) === norm(name))) return toast('같은 이름의 유형이 이미 있어요.', 'error');
         try {
-          const c = await save('categories', { name, color: '#7C8B99', isDefault: false, order: 50 + S.categories.length });
+          const c = await save('categories', { name, color: '#9B7BD6', isDefault: false, order: 50 + S.categories.length });
           const g = root.querySelector('[data-chips="cats"]');
           g.insertAdjacentHTML('beforeend', `<button type="button" class="chip on" data-val="${esc(c.id)}" style="--c:${esc(c.color)}">${esc(c.name)}</button>`);
         } catch (err) { toast(err.message, 'error'); }
@@ -313,7 +313,7 @@ export function promptText(title, placeholder = '', value = '') {
 }
 
 // ---------------- 친구 유형 관리 ----------------
-const PALETTE = ['#6C8EAD', '#6F8A72', '#C08B5C', '#B7727B', '#8A7BA8', '#5E9B9B', '#C59A3E', '#929BA4', '#7C8B99', '#A0785A'];
+const PALETTE = ['#5C9BEF', '#7D86DB', '#F3A12E', '#F4835A', '#5FB37C', '#3FB2BA', '#E5739B', '#A39E96', '#9B7BD6', '#C9A227'];
 
 export function categoriesView() {
   const counts = new Map(S.categories.map((c) => [c.id, S.friends.filter((f) => (f.categoryIds || []).includes(c.id)).length]));

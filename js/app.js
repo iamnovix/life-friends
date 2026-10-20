@@ -81,7 +81,7 @@ async function render() {
   topbar.hidden = !!v.hideTop;
   topbar.innerHTML = `
     ${v.back ? `<a class="icon-btn" href="#${esc(v.back)}" aria-label="뒤로">${icon('back', 26)}</a>` : '<span class="top-spacer"></span>'}
-    <h1 class="top-title">${esc(v.title || '')}</h1>
+    <h1 class="top-title">${v.brand ? '<span class="brand-title"><img src="assets/logo-symbol.png" alt="">인생친구</span>' : esc(v.title || '')}</h1>
     ${S.user && !path.startsWith('/settings') ? `<a class="icon-btn" href="#/settings" aria-label="설정">${icon('gear', 24)}</a>` : '<span class="top-spacer"></span>'}`;
   const showNav = S.user && !v.hideNav;
   tabbar.hidden = !showNav;

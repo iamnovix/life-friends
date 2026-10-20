@@ -13,6 +13,7 @@ export function homeView() {
   if (!S.friends.length) {
     return {
       title: '인생친구',
+    brand: true,
       html: head + emptyState(
         '첫 친구를 기록해 보세요',
         '살면서 만난 소중한 사람들을 한 명씩 기록하면<br>나의 인간관계 역사를 돌아볼 수 있어요.',
@@ -101,6 +102,7 @@ export function homeView() {
   `;
   return {
     title: '인생친구',
+    brand: true,
     html,
     mount(root) {
       root.querySelector('[data-dismiss-nudge]')?.addEventListener('click', () => {
