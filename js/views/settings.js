@@ -3,6 +3,7 @@ import { esc, todayStr, download, fmtDate, isValidDate, nowISO } from '../util.j
 import { statusLabel } from '../stats.js';
 import { section, notice } from '../components.js';
 import { icon, nav, toast, confirmDialog, modal, busy } from '../ui.js';
+import { installButton, bindInstall, STORE_STATUS } from '../install.js';
 
 const link = (href, ic, label, sub = '') => `<a class="row" href="#${href}"><span class="row-ic">${icon(ic, 22)}</span><div class="row-main"><div class="row-title">${label}</div>${sub ? `<div class="row-sub">${sub}</div>` : ''}</div>${icon('right', 20)}</a>`;
 
@@ -12,6 +13,9 @@ export function settingsView() {
     title: '설정',
     back: '/home',
     html: `
+      ${installButton() ? section('앱 설치', `
+        <div class="store-status">${icon('clock', 18)} <span>${STORE_STATUS}이에요. 출시 전까지 홈 화면에 설치해서 앱처럼 쓰실 수 있어요.</span></div>
+        ${installButton('btn primary lg block')}`) : ''}
       ${section('계정', `<div class="list">
         ${link('/settings/account', 'users', '내 정보', S.mode === 'cloud' ? esc(u.email) : '이 기기에만 저장 중')}
       </div>`)}
@@ -36,6 +40,7 @@ export function settingsView() {
       </div>
       ${S.mode === 'cloud' ? `<button class="btn ghost lg block" data-logout>로그아웃</button>` : ''}`,
     mount(root) {
+      bindInstall(root);
       root.querySelector('[data-copy-account]').addEventListener('click', async () => {
         const text = '카카오뱅크 3333-01-4475921';
         let ok = false;

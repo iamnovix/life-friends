@@ -3,17 +3,39 @@ import { esc, todayStr, num, relDays, fmtDay, addDays } from '../util.js';
 import { summarize, meetingsInYear, rankFriends, countByFriend, categoryStats, monthlyTrend, longNoSee, upcomingBirthdays, upcomingReminders, lastMet } from '../stats.js';
 import { avatar, meetingRow, columnChart, section, emptyState, bars } from '../components.js';
 import { icon } from '../ui.js';
+import { isMobile, isStandalone, bindInstall } from '../install.js';
+
+// 휴대폰 브라우저로 열었을 때 앱 설치 안내 (닫으면 다시 안 보임)
+function installBanner() {
+  let dismissed = false;
+  try { dismissed = localStorage.getItem('lf_install_banner') === 'off'; } catch { /* 무시 */ }
+  if (!isMobile() || isStandalone() || dismissed) return '';
+  return `<div class="install-banner">
+    <img src="assets/icon-192.png" alt="">
+    <div class="install-banner-text"><b>앱으로 설치하기</b><small>스토어 심사 중 · 홈 화면에 바로 설치</small></div>
+    <button class="btn primary sm" data-install>설치</button>
+    <button class="icon-btn" data-banner-close aria-label="닫기">${icon('x', 18)}</button>
+  </div>`;
+}
+function bindBanner(root) {
+  bindInstall(root);
+  root.querySelector('[data-banner-close]')?.addEventListener('click', () => {
+    try { localStorage.setItem('lf_install_banner', 'off'); } catch { /* 무시 */ }
+    root.querySelector('.install-banner')?.remove();
+  });
+}
 
 export function homeView() {
   const today = todayStr();
   const year = +today.slice(0, 4);
   const name = S.settings.displayName;
-  const head = `<div class="hello"><p class="muted">${esc(name ? `${name}님의` : '나의')} 인생친구</p><h1>내 인생에는 어떤 친구들이 있었을까?</h1></div>`;
+  const head = installBanner() + `<div class="hello"><p class="muted">${esc(name ? `${name}님의` : '나의')} 인생친구</p><h1>내 인생에는 어떤 친구들이 있었을까?</h1></div>`;
 
   if (!S.friends.length) {
     return {
       title: '인생친구',
-    brand: true,
+      brand: true,
+      mount: bindBanner,
       html: head + emptyState(
         '첫 친구를 기록해 보세요',
         '살면서 만난 소중한 사람들을 한 명씩 기록하면<br>나의 인간관계 역사를 돌아볼 수 있어요.',
@@ -105,6 +127,7 @@ export function homeView() {
     brand: true,
     html,
     mount(root) {
+      bindBanner(root);
       root.querySelector('[data-dismiss-nudge]')?.addEventListener('click', () => {
         localStorage.setItem('lf_nudge_birth', '1');
         root.querySelector('[data-dismiss-nudge]').closest('.notice').remove();

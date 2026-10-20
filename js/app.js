@@ -10,6 +10,7 @@ import { analysisView } from './views/analysis.js';
 import { memoriesView, memoryFormView, memoryDetailView, reportView } from './views/memories.js';
 import { settingsView, accountView, notifyView, dataView, aiView, premiumView, privacyView, termsView } from './views/settings.js';
 import { onboardingView, loginView } from './views/auth.js';
+import { registerServiceWorker } from './install.js';
 
 const ROUTES = [
   [/^\/home$/, homeView, 'home'],
@@ -139,4 +140,5 @@ window.addEventListener('unhandledrejection', (e) => {
   toast(e.reason?.message || '문제가 생겼어요. 다시 시도해 주세요.', 'error');
 });
 
+registerServiceWorker();
 boot();

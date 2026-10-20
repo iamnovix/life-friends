@@ -1,6 +1,7 @@
 import { S, backend } from '../store.js';
 import { esc } from '../util.js';
 import { icon, nav, toast, busy } from '../ui.js';
+import { installButton, bindInstall, STORE_STATUS } from '../install.js';
 
 const SLIDES = [
   { logo: true, title: '내 인생에는 어떤 친구들이 있었을까?', desc: '학창 시절부터 지금까지, 살면서 만난 소중한 사람들을 한곳에 기록해요.' },
@@ -62,8 +63,11 @@ export function loginView() {
         <button class="btn primary lg block" type="submit" data-submit>로그인</button>
         <button type="button" class="link center-block" data-reset>비밀번호를 잊으셨나요?</button>
       </form>
+      ${installButton('btn ghost lg block install-btn')}
+      ${installButton() ? `<p class="hint center">${STORE_STATUS} · 출시 전에도 홈 화면에 설치해 쓸 수 있어요</p>` : ''}
     </div>`,
     mount(root) {
+      bindInstall(root);
       const form = root.querySelector('form');
       const submit = root.querySelector('[data-submit]');
       root.querySelector('[data-mode]').addEventListener('click', (e) => {
