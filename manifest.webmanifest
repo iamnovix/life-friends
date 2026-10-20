@@ -1,0 +1,11 @@
+{
+  "name": "인생친구",
+  "short_name": "인생친구",
+  "description": "살면서 만난 친구와 만남을 기록하고 돌아보는 인간관계 기록 앱",
+  "start_url": "./#/home",
+  "display": "standalone",
+  "background_color": "#F8F5EE",
+  "theme_color": "#F8F5EE",
+  "lang": "ko",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
