@@ -59,8 +59,8 @@ export async function showInstallGuide() {
   }
   let body;
   if (isInApp()) {
-    body = `<p class="modal-msg">${isKakao() ? '카카오톡' : '앱'} 안에서 열린 화면에서는 설치할 수 없어요. 먼저 ${isIOS() ? '사파리' : '크롬'}로 열어 주세요.</p>
-      <button class="btn primary lg block" data-external>${isIOS() ? '사파리' : '크롬'}로 열기</button>
+    body = `<p class="modal-msg">${isKakao() ? '카카오톡' : '앱'} 안에서 열린 화면에서는 설치할 수 없어요. 먼저 ${isIOS() ? '사파리로' : '크롬으로'} 열어 주세요.</p>
+      <button class="btn primary lg block" data-external>${isIOS() ? '사파리로' : '크롬으로'} 열기</button>
       <ol class="steps">${step(1, `열리지 않으면 화면 오른쪽 위(또는 아래) <b>⋮</b> 또는 <b>공유</b> 버튼`)}${step(2, `<b>"다른 브라우저로 열기"</b> 선택`)}${step(3, '열린 화면에서 다시 <b>앱 설치하기</b>를 눌러 주세요')}</ol>`;
   } else if (isIOS()) {
     body = `<ol class="steps">
