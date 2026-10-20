@@ -414,6 +414,12 @@ body.with-nav .form-actions.sticky { bottom: calc(var(--nav-h) + env(safe-area-i
 .spinner { width: 40px; height: 40px; border-radius: 50%; border: 4px solid var(--line); border-top-color: var(--primary); animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+.support { text-align: center; background: var(--accent-soft); border-radius: 16px; padding: 1rem; margin: .8rem 0 1rem; font-size: .92rem; color: var(--text-2); }
+.support p { margin: 0 0 .3rem; }
+.support-account b { color: var(--text); letter-spacing: .02em; }
+.support-account span { white-space: nowrap; }
+.support .btn { margin-top: .5rem; }
+
 .doc h2 { font-size: 1.05rem; margin: 1.4rem 0 .4rem; }
 .doc p { margin: 0 0 .6rem; color: var(--text-2); }
 

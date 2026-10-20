@@ -29,8 +29,28 @@ export function settingsView() {
         ${link('/terms', 'book', '서비스 이용약관')}
       </div>`)}
       <p class="hint center">인생친구 v1.0 · 저장 위치: ${S.mode === 'cloud' ? '클라우드(Firebase, 본인 계정만 접근)' : '이 기기의 브라우저'}</p>
+      <div class="support">
+        <p>여러분의 후원은 개발자에게 큰 도움이 됩니다.</p>
+        <p class="support-account">후원계좌: 카카오뱅크 <b>3333-01-4475921</b> <span>(예금주: 최성욱)</span></p>
+        <button class="btn soft sm" data-copy-account>${icon('heart', 18)} 계좌번호 복사</button>
+      </div>
       ${S.mode === 'cloud' ? `<button class="btn ghost lg block" data-logout>로그아웃</button>` : ''}`,
     mount(root) {
+      root.querySelector('[data-copy-account]').addEventListener('click', async () => {
+        const text = '카카오뱅크 3333-01-4475921';
+        let ok = false;
+        try { await navigator.clipboard.writeText(text); ok = true; } catch { /* 카톡 내 브라우저 등 */ }
+        if (!ok) {
+          const ta = Object.assign(document.createElement('textarea'), { value: text, readOnly: true });
+          ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+          document.body.appendChild(ta);
+          ta.select();
+          ta.setSelectionRange(0, text.length);
+          try { ok = document.execCommand('copy'); } catch { ok = false; }
+          ta.remove();
+        }
+        toast(ok ? '계좌번호를 복사했어요. 감사합니다!' : `복사가 안 되는 브라우저예요: ${text}`);
+      });
       root.querySelector('[data-logout]')?.addEventListener('click', async () => {
         if (!(await confirmDialog({ title: '로그아웃할까요?', message: '기록은 클라우드에 안전하게 남아 있어요.', okText: '로그아웃' }))) return;
         await backend().signOut();
